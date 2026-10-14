@@ -1,0 +1,29 @@
+{
+  "name": "rifas-pages",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "setup": "npm ci && npm ci --prefix functions",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "emulators": "firebase emulators:start --project demo-rifas",
+    "seed": "node scripts/seed.mjs",
+    "test": "firebase emulators:exec --project demo-rifas --only auth,firestore,functions \"vitest run\"",
+    "test:unit": "vitest run tests/raffle.test.js"
+  },
+  "dependencies": {
+    "firebase": "^11.0.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^4.0.0",
+    "@vitejs/plugin-vue": "^5.2.0",
+    "firebase-admin": "^13.0.0",
+    "firebase-tools": "^14.0.0",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
+  }
+}

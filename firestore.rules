@@ -1,0 +1,53 @@
+rules_version = '2';
+
+// Public:  the board (grid), the ranking (publicParticipants) and campaign info.
+// Private: tickets (participants), phone book (users) and winners config.
+// Players never write: revealing goes through the `reveal` callable function.
+// Admins are users with the custom claim { admin: true } (see scripts/set-admin.mjs);
+// merely being signed in grants nothing.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // grid/{n}: { status: 'sold' | 'revealed' | 'winner', ownerId?, revealedAt? }
+    // ownerId (a public id, never the ticket token) is only set once revealed.
+    match /grid/{number} {
+      allow read: if true;
+      allow create, delete: if isAdmin();
+      // A winning cell can never be downgraded.
+      allow update: if isAdmin()
+                    && !(resource.data.status == 'winner' && request.resource.data.status != 'winner');
+    }
+
+    // publicParticipants/{publicId}: { name, phoneSuffix, total, createdAt }
+    match /publicParticipants/{publicId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // config/campaign: public counters and dates; no activation points.
+    match /config/campaign {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // config/winners: { winnerNumbers, activationPoints, assignedWinners }
+    match /config/winners {
+      allow read, write: if isAdmin();
+    }
+
+    // participants/{token}: the ticket. The token in the URL is the only
+    // credential a player has, so tickets are never readable from clients.
+    match /participants/{token} {
+      allow read, write: if isAdmin();
+    }
+
+    // users/{phone}: phone book kept across campaigns for autocomplete.
+    match /users/{phone} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
