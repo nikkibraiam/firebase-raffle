@@ -1,6 +1,6 @@
-# rifas-pages — real-time raffle on Firebase
+# firebase-raffle — real-time raffle on Firebase
 
-[![CI](https://github.com/nikkibraiam/rifas-pages/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/nikkibraiam/rifas-pages/actions/workflows/ci.yml)
+[![CI](https://github.com/nikkibraiam/firebase-raffle/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/nikkibraiam/firebase-raffle/actions/workflows/ci.yml)
 
 A raffle web app with a live 1,000-number board. The organizer sells numbers
 and sends each buyer a private link. Buyers open the link and reveal their
